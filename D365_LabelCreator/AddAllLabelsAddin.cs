@@ -143,7 +143,7 @@
         {
             foreach(IFormControl control in controls.OfType<IFormControl>())
             {
-                var labelPrefix = String.Format("{0}_{1}", control.Name, control.Name);
+                var labelPrefix = String.Format("{0}_{1}", formName, control.Name);
                 helper.createPropertyLabels(control, labelPrefix, labelFile);
                 crawlDesignControls(control.VisualChildren, labelFile, formName);
             }
