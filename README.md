@@ -6,6 +6,7 @@ Visual Studio Add-in for easy creation of Labels
 https://stoneridgesoftware.com/learn-to-use-a-label-creator-add-in-extension-in-dynamics-365-for-finance-operations/
 
 **Install**
+
 References to some library may need to be added.
 *DTES can be found here*
 C:\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\
