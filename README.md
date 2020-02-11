@@ -1,8 +1,8 @@
 # MEMX_D365_LabelCreator
 Visual Studio Add-in for easy creation of Labels
 
-*Thanks and Credit to Stoneridge Software and especially Mark Nelson for the begining code that started this*
-*it hardly resembles where it started but heres the link to their post regarding automated Label creation for 365.*
+*Thanks and Credit to Stoneridge Software and especially Mark Nelson for the begining code that started this.*
+*It hardly resembles where it started but heres the link to their post regarding automated Label creation for 365.*
 https://stoneridgesoftware.com/learn-to-use-a-label-creator-add-in-extension-in-dynamics-365-for-finance-operations/
 
 **Install**
