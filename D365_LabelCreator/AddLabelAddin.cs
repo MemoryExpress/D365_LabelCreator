@@ -11,6 +11,7 @@
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Reports;
 
     /// <summary>
     /// TODO: Say a few words about what your AddIn is going to do
@@ -28,7 +29,7 @@
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(ISecurityRole))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IEdtBase))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IMenuItem))]
-
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IReportDataSetField))]
     public class AddLabelAddin : DesignerMenuBase
     {
         #region Member variables
@@ -184,6 +185,17 @@
                     AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
 
                     helper.createPropertyLabels(AxMenuItem, labelPrefix, labelFile);
+                }
+                else if (e.SelectedElement is IReportDataSetField)
+                {
+                    IReportDataSetField dataField = e.SelectedElement as IReportDataSetField;
+
+                    modelInfoCollection = metaModelService.GetReportModelInfo(dataField.DataSet.Report.Name);
+                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+
+                    var labelPrefix = String.Format("{0}_{1}_{2}", dataField.DataSet.Report.Name, dataField.DataSet.Name, dataField.Name);
+
+                    helper.createPropertyLabels(dataField, labelPrefix, labelFile);
                 }
             }
             catch (Exception ex)

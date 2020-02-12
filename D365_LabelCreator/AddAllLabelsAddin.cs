@@ -11,6 +11,7 @@
     using Microsoft.Dynamics.AX.Metadata.Service;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
     using System.Collections;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Reports;
 
     /// <summary>
     /// This Addin Will Generate labels for The root element+children elements
@@ -22,6 +23,8 @@
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(ITable))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IFormDesign))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IBaseEnum))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IReportDataSet))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IReport))]
     public class DesignerContextMenuAddIn : DesignerMenuBase
     {
         #region Member variables
@@ -123,6 +126,35 @@
                     {
                         var enumValueLabelPrefix = String.Format("{0}_{1}_{2}", Tags.EnumTag, axEnum.Name, enumValue.Name);
                         helper.createPropertyLabels(enumValue, enumValueLabelPrefix, labelFile);
+                    }
+                }
+                else if (e.SelectedElement is IReport)
+                {
+                    IReport Report = e.SelectedElement as IReport;
+
+                    modelInfoCollection = metaModelService.GetReportModelInfo(Report.Name);
+                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+
+                    foreach (IReportDataSet dataSet in Report.DataSets)
+                    {
+                        foreach (IReportDataSetField dataField in dataSet.Fields)
+                        {
+                            var labelPrefix = String.Format("{0}_{1}_{2}", dataSet.Report.Name, dataSet.Name, dataField.Name);
+                            helper.createPropertyLabels(dataField, labelPrefix, labelFile);
+                        }
+                    }
+                }
+                else if (e.SelectedElement is IReportDataSet)
+                {
+                    IReportDataSet dataSet = e.SelectedElement as IReportDataSet;
+                    
+                    modelInfoCollection = metaModelService.GetReportModelInfo(dataSet.Report.Name);
+                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+
+                    foreach (IReportDataSetField dataField in dataSet.Fields)
+                    {
+                        var labelPrefix = String.Format("{0}_{1}_{2}", dataSet.Report.Name, dataSet.Name,dataField.Name);
+                        helper.createPropertyLabels(dataField, labelPrefix, labelFile);
                     }
                 }
             }
