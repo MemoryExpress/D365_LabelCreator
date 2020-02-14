@@ -6,8 +6,6 @@
     using Microsoft.Dynamics.Framework.Tools.Extensibility;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
-    using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
-    using Microsoft.Dynamics.AX.Metadata.MetaModel;
     using Microsoft.Dynamics.AX.Metadata.Service;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
     using System.Collections;
@@ -68,33 +66,22 @@
             helper.PromptOnDuplicate = false;
             try
             {
-                ModelInfoCollection modelInfoCollection = null;
+                // Get the metamodelService
+                IMetaModelService metaModelService = helper.MetaModelService;
 
-                IMetaModelService metaModelService = null;
-                // Get the metamodel provider
-                IMetaModelProviders metaModelProvider = ServiceLocator.GetService(typeof(IMetaModelProviders)) as IMetaModelProviders;
-
-                if (metaModelProvider != null)
-                {
-                    // Get the metamodel service
-                    metaModelService = metaModelProvider.CurrentMetaModelService;
-                }
-                
                 // Is the selected element a table?
                 if (e.SelectedElement is ITable)
                 {
                     ITable table = e.SelectedElement as ITable;
+                    helper.setModelAndLabelFile(metaModelService.GetTableModelInfo(table.Name));
 
-                    modelInfoCollection = metaModelService.GetTableModelInfo(table.Name);
-                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
-
-                    helper.createPropertyLabels(table, table.Name, labelFile);
+                    helper.createPropertyLabels(table, table.Name);
 
                     // Loop through each BaseField. Similar logic coulde be added for FieldGroups Ect.
                     foreach(IBaseField baseField in table.BaseFields)
                     {
                         var labelPrefix = String.Format("{0}_{1}", baseField.Table.Name, baseField.Name);
-                        helper.createPropertyLabels(baseField, labelPrefix, labelFile);
+                        helper.createPropertyLabels(baseField, labelPrefix);
                     }
                 }
                 // Is this a Form Design Element?
@@ -103,44 +90,41 @@
                     IFormDesign formDesign = e.SelectedElement as IFormDesign;
                     var form = formDesign.Form;
 
-                    modelInfoCollection = metaModelService.GetFormModelInfo(form.Name);
-                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+                    helper.setModelAndLabelFile(metaModelService.GetFormModelInfo(form.Name));
 
-                    helper.createPropertyLabels(formDesign, formDesign.Form.Name, labelFile);
+                    helper.createPropertyLabels(formDesign, formDesign.Form.Name);
 
                     // Loop through all children FormControls.
-                    this.crawlDesignControls(formDesign.VisualChildren, labelFile,form.Name);
+                    this.crawlDesignControls(formDesign.VisualChildren,form.Name);
                 }
                 else if (e.SelectedElement is IBaseEnum)
                 {
                     IBaseEnum axEnum = e.SelectedElement as IBaseEnum;
+                    helper.setModelAndLabelFile(metaModelService.GetEnumModelInfo(axEnum.Name));
+
                     var labelPrefix = String.Format("{0}_{1}", Tags.EnumTag, axEnum.Name);
 
-                    modelInfoCollection = metaModelService.GetEnumModelInfo(axEnum.Name);
-                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
-
-                    helper.createPropertyLabels(axEnum, labelPrefix, labelFile);
+                    helper.createPropertyLabels(axEnum, labelPrefix);
                     // Was unable to locate a way of finding the parent enum of a enumValue. No model could be found without it.
                     // Loop through all values
                     foreach (IBaseEnumValue enumValue in axEnum.BaseEnumValues)
                     {
                         var enumValueLabelPrefix = String.Format("{0}_{1}_{2}", Tags.EnumTag, axEnum.Name, enumValue.Name);
-                        helper.createPropertyLabels(enumValue, enumValueLabelPrefix, labelFile);
+                        helper.createPropertyLabels(enumValue, enumValueLabelPrefix);
                     }
                 }
                 else if (e.SelectedElement is IReport)
                 {
                     IReport Report = e.SelectedElement as IReport;
 
-                    modelInfoCollection = metaModelService.GetReportModelInfo(Report.Name);
-                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+                    helper.setModelAndLabelFile(metaModelService.GetReportModelInfo(Report.Name));
 
                     foreach (IReportDataSet dataSet in Report.DataSets)
                     {
                         foreach (IReportDataSetField dataField in dataSet.Fields)
                         {
                             var labelPrefix = String.Format("{0}_{1}_{2}", dataSet.Report.Name, dataSet.Name, dataField.Name);
-                            helper.createPropertyLabels(dataField, labelPrefix, labelFile);
+                            helper.createPropertyLabels(dataField, labelPrefix);
                         }
                     }
                 }
@@ -148,19 +132,18 @@
                 {
                     IReportDataSet dataSet = e.SelectedElement as IReportDataSet;
                     
-                    modelInfoCollection = metaModelService.GetReportModelInfo(dataSet.Report.Name);
-                    AxLabelFile labelFile = helper.GetLabelFile(metaModelProvider, metaModelService, modelInfoCollection);
+                    helper.setModelAndLabelFile(metaModelService.GetReportModelInfo(dataSet.Report.Name));
 
                     foreach (IReportDataSetField dataField in dataSet.Fields)
                     {
                         var labelPrefix = String.Format("{0}_{1}_{2}", dataSet.Report.Name, dataSet.Name,dataField.Name);
-                        helper.createPropertyLabels(dataField, labelPrefix, labelFile);
+                        helper.createPropertyLabels(dataField, labelPrefix);
                     }
                 }
             }
             catch (Exception ex)
             {
-                CoreUtility.HandleExceptionWithErrorMessage(ex);
+                Microsoft.Dynamics.Framework.Tools.MetaModel.Core.CoreUtility.HandleExceptionWithErrorMessage(ex);
             }
         }
         #endregion
@@ -171,18 +154,15 @@
         /// <param name="controls">Instance of <c>IEnumerable</c> containing FormContorls</param>
         /// <param name="labelFile">Instance of <c>AXLabelFile</c> to insert into</param>
         /// <param name="formName"><c>FormName</c> to add as a prefix</param>
-        public void crawlDesignControls(IEnumerable controls, AxLabelFile labelFile,string formName)
+        public void crawlDesignControls(IEnumerable controls, string formName)
         {
             foreach(IFormControl control in controls.OfType<IFormControl>())
             {
                 var labelPrefix = String.Format("{0}_{1}", formName, control.Name);
-                helper.createPropertyLabels(control, labelPrefix, labelFile);
-                crawlDesignControls(control.VisualChildren, labelFile, formName);
+                helper.createPropertyLabels(control, labelPrefix);
+                crawlDesignControls(control.VisualChildren,formName);
             }
-        }
-
-
-        
+        }        
     }
 }
 

@@ -16,7 +16,42 @@ namespace D365_LabelCreator
     /// </summary>
     class LabelHelper
     {
-        private bool promptOnDuplicate = true;
+        ModelInfoCollection modelInfoCollection = null;
+        IMetaModelService metaModelService = null;
+        // Label file to write into
+        AxLabelFile currentLabelFile;
+        // Get the metamodel provider
+        IMetaModelProviders metaModelProvider = ServiceLocator.GetService(typeof(IMetaModelProviders)) as IMetaModelProviders;
+        bool promptOnDuplicate = true;
+
+        public LabelHelper()
+        {
+            if (metaModelProvider != null)
+            {
+                // Get the metamodel service
+                MetaModelService = metaModelProvider.CurrentMetaModelService;
+            }
+            else
+            {
+                CoreUtility.DisplayError("Unable to obtain MetaModelProvider");
+            }
+        }
+
+        /// <summary>
+        /// MetaModelService to interact with metadata
+        /// </summary>
+        public IMetaModelService MetaModelService
+        {
+            get
+            {
+                return metaModelService;
+            }
+
+            set
+            {
+                metaModelService = value;
+            }
+        }
 
         /// <summary>
         /// If true, Display Warning on already existing labelId's. True by default.
@@ -35,6 +70,23 @@ namespace D365_LabelCreator
         }
 
         /// <summary>
+        /// Set the model info and retreive it's label file.
+        /// </summary>
+        /// <param name="modelInfo">Instance of <c>ModelInfoCollection</c> to retreive label file for</param>
+        public void setModelAndLabelFile(ModelInfoCollection modelInfo, AxLabelFile labelFile = null)
+        {
+            modelInfoCollection = modelInfo;
+            if (labelFile == null)
+            {
+                currentLabelFile = this.GetLabelFile();
+            }
+            else
+            {
+                currentLabelFile = labelFile;
+            }
+        }
+
+        /// <summary>
         /// Check for existing label, if none exists create ie
         /// </summary>
         /// <param name="labelText"><c>String</c> Value for the label</param>
@@ -42,7 +94,7 @@ namespace D365_LabelCreator
         /// <param name="propertyName"><c>String</c> value that is the PropertyName which becomes the Suffix</param>
         /// <param name="labelFile">Instance of <c>AXLabelFile</c> to insert into</param>
         /// <returns></returns>
-        private String FindOrCreateLabel(String labelText, String elementName, String propertyName, AxLabelFile labelFile)
+        private String FindOrCreateLabel(String labelText, String elementName, String propertyName)
         {
             string newLabelId = String.Empty;
 
@@ -56,7 +108,7 @@ namespace D365_LabelCreator
                 LabelControllerFactory factory = new LabelControllerFactory();
 
                 // Get the label edit controller
-                LabelEditorController labelController = factory.GetOrCreateLabelController(labelFile, LabelHelper.Context);
+                LabelEditorController labelController = factory.GetOrCreateLabelController(currentLabelFile, LabelHelper.Context);
 
                 // Make sure the label doesn't exist.
                 // What will you do if it does?
@@ -66,7 +118,7 @@ namespace D365_LabelCreator
                     labelController.Save();
 
                     // Construct a label reference to go into the label property
-                    newLabelId = $"@{labelFile.LabelFileId}:{labelId}";
+                    newLabelId = $"@{currentLabelFile.LabelFileId}:{labelId}";
                 }
                 else if(promptOnDuplicate)
                 {
@@ -84,8 +136,14 @@ namespace D365_LabelCreator
         /// <param name="ob">Instance of an <c>Object</c> to check for preoprties</param>
         /// <param name="labelPrefix"><c>String</c> Prefix to add to the label</param>
         /// <param name="labelFile">Instance of <c>AXLabelFile</c> to insert into</param>
-        public void createPropertyLabels(Object ob, String labelPrefix, AxLabelFile labelFile)
+        public void createPropertyLabels(Object ob, String labelPrefix)
         {
+            if(currentLabelFile == null)
+            {
+                CoreUtility.DisplayError("Labelfile not found");
+                return;
+            }
+
             var type = ob.GetType();
 
             var LabelProperty = getLabelProperty(type);
@@ -95,7 +153,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.LabelTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.LabelTag);
                     LabelProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -107,7 +165,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.HelpTextTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.HelpTextTag);
                     helpTextProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -119,7 +177,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.CaptionTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.CaptionTag);
                     captionProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -131,7 +189,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.TextTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.TextTag);
                     textProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -143,7 +201,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DescriptionTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DescriptionTag);
                     DescriptionProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -155,7 +213,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DeveloperDocumentationTag, labelFile);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DeveloperDocumentationTag);
                     developerDocumentationProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -198,7 +256,7 @@ namespace D365_LabelCreator
         /// <param name="metaModelService">Instance of <c>IMetaModelService</c></param>
         /// <param name="modelInfoCollection">Instance of <c>ModelInfoCollection</c></param>
         /// <returns>Instance of <c>AXLabelFile</c></returns>
-        public AxLabelFile GetLabelFile(IMetaModelProviders metaModelProviders, IMetaModelService metaModelService, ModelInfoCollection modelInfoCollection)
+        public AxLabelFile GetLabelFile()
         {
             // Choose the first model in the collection
             ModelInfo modelInfo = ((System.Collections.ObjectModel.Collection<ModelInfo>)modelInfoCollection)[0];
@@ -211,11 +269,11 @@ namespace D365_LabelCreator
             };
 
             // Get the list of label files from that model
-            IList<String> labelFileNames = metaModelProviders.CurrentMetadataProvider.LabelFiles.ListObjectsForModel(modelInfo.Name);
+            IList<String> labelFileNames = metaModelProvider.CurrentMetadataProvider.LabelFiles.ListObjectsForModel(modelInfo.Name);
 
             // Choose the first
             // What happens if there is no label file?
-            AxLabelFile labelFile = metaModelService.GetLabelFile(labelFileNames[0], modelLoadInfo);
+            AxLabelFile labelFile = MetaModelService.GetLabelFile(labelFileNames[0], modelLoadInfo);
 
             return labelFile;
         }
