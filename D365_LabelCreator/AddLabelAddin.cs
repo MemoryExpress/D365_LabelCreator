@@ -11,6 +11,7 @@
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Reports;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 
 
     /// <summary>
@@ -22,6 +23,8 @@
     // You can specify multiple DesignerMenuExportMetadata attributes to meet your needs
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(ITable))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IBaseField))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IView))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IViewBaseField))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IFormDesign))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IFormControl))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(ISecurityPrivilege))]
@@ -90,6 +93,21 @@
                     helper.setModelAndLabelFile(metaModelService.GetTableModelInfo(table.Name));
 
                     labelPrefix = String.Format("{0}_{1}", baseField.Table.Name, baseField.Name);
+                }
+                if (e.SelectedElement is IView)
+                {
+                    IView view = e.SelectedElement as IView;
+                    helper.setModelAndLabelFile(metaModelService.GetTableModelInfo(view.Name));
+
+                    labelPrefix = view.Name;
+                }
+                else if (e.SelectedElement is IViewBaseField)
+                {
+                    IViewBaseField baseField = e.SelectedElement as IViewBaseField;
+                    var view = baseField.View;
+                    helper.setModelAndLabelFile(metaModelService.GetViewModelInfo(view.Name));
+
+                    labelPrefix = String.Format("{0}_{1}", baseField.View.Name, baseField.Name);
                 }
                 else if (e.SelectedElement is IFormDesign)
                 {

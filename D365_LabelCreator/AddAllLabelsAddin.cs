@@ -10,6 +10,7 @@
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
     using System.Collections;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Reports;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 
     /// <summary>
     /// This Addin Will Generate labels for The root element+children elements
@@ -19,6 +20,7 @@
     // If you need to specify any other element, change this AutomationNodeType value.
     // You can specify multiple DesignerMenuExportMetadata attributes to meet your needs
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(ITable))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IView))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IFormDesign))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IBaseEnum))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IReportDataSet))]
@@ -81,6 +83,20 @@
                     foreach(IBaseField baseField in table.BaseFields)
                     {
                         var labelPrefix = String.Format("{0}_{1}", baseField.Table.Name, baseField.Name);
+                        helper.createPropertyLabels(baseField, labelPrefix);
+                    }
+                }
+                if (e.SelectedElement is IView)
+                {
+                    IView view = e.SelectedElement as IView;
+                    helper.setModelAndLabelFile(metaModelService.GetViewModelInfo(view.Name));
+
+                    helper.createPropertyLabels(view, view.Name);
+
+                    // Loop through each BaseField. Similar logic coulde be added for FieldGroups Ect.
+                    foreach (IViewBaseField baseField in view.ViewBaseFields)
+                    {
+                        var labelPrefix = String.Format("{0}_{1}", baseField.View.Name, baseField.Name);
                         helper.createPropertyLabels(baseField, labelPrefix);
                     }
                 }
