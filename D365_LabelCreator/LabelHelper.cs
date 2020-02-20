@@ -24,6 +24,10 @@ namespace D365_LabelCreator
         IMetaModelProviders metaModelProvider = ServiceLocator.GetService(typeof(IMetaModelProviders)) as IMetaModelProviders;
         bool promptOnDuplicate = true;
 
+        //Factory and controller for adding and saving labels
+        LabelControllerFactory factory = new LabelControllerFactory();
+        LabelEditorController labelController;
+
         public LabelHelper()
         {
             if (metaModelProvider != null)
@@ -104,18 +108,11 @@ namespace D365_LabelCreator
                 // Construct a label id that will be unique
                 string labelId = $"{elementName}_{propertyName}";
 
-                // Get the label factor
-                LabelControllerFactory factory = new LabelControllerFactory();
-
-                // Get the label edit controller
-                LabelEditorController labelController = factory.GetOrCreateLabelController(currentLabelFile, LabelHelper.Context);
-
                 // Make sure the label doesn't exist.
                 // What will you do if it does?
                 if (labelController.Exists(labelId) == false)
                 {
                     labelController.Insert(labelId, labelText, String.Empty);
-                    labelController.Save();
 
                     // Construct a label reference to go into the label property
                     newLabelId = $"@{currentLabelFile.LabelFileId}:{labelId}";
@@ -143,6 +140,8 @@ namespace D365_LabelCreator
                 CoreUtility.DisplayError("Labelfile not found");
                 return;
             }
+
+            labelController = factory.GetOrCreateLabelController(currentLabelFile, LabelHelper.Context);
 
             var type = ob.GetType();
 
@@ -217,6 +216,8 @@ namespace D365_LabelCreator
                     developerDocumentationProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
+
+            labelController.Save();
         }
 
 
