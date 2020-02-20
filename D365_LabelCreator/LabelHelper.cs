@@ -98,10 +98,14 @@ namespace D365_LabelCreator
         /// <param name="propertyName"><c>String</c> value that is the PropertyName which becomes the Suffix</param>
         /// <param name="labelFile">Instance of <c>AXLabelFile</c> to insert into</param>
         /// <returns></returns>
-        private String FindOrCreateLabel(String labelText, String elementName, String propertyName)
+        private String FindOrCreateLabel(String labelText, String elementName, String propertyName,bool delaySave = false)
         {
             string newLabelId = String.Empty;
 
+            if(labelController == null)
+            {
+                labelController = factory.GetOrCreateLabelController(currentLabelFile, LabelHelper.Context);
+            }
             // Don't bother if the string is empty
             if (String.IsNullOrEmpty(labelText) == false)
             {
@@ -113,7 +117,10 @@ namespace D365_LabelCreator
                 if (labelController.Exists(labelId) == false)
                 {
                     labelController.Insert(labelId, labelText, String.Empty);
-
+                    if (!delaySave)
+                    {
+                        labelController.Save();
+                    }
                     // Construct a label reference to go into the label property
                     newLabelId = $"@{currentLabelFile.LabelFileId}:{labelId}";
                 }
@@ -152,7 +159,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.LabelTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.LabelTag,true);
                     LabelProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -164,7 +171,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.HelpTextTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.HelpTextTag,true);
                     helpTextProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -176,7 +183,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.CaptionTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.CaptionTag, true);
                     captionProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -188,7 +195,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.TextTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.TextTag, true);
                     textProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -200,7 +207,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DescriptionTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DescriptionTag, true);
                     DescriptionProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
@@ -212,7 +219,7 @@ namespace D365_LabelCreator
 
                 if (this.IsValidLabelId(label) == false)
                 {
-                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DeveloperDocumentationTag);
+                    var labelid = this.FindOrCreateLabel(label, labelPrefix, Tags.DeveloperDocumentationTag, true);
                     developerDocumentationProperty.SetValue(ob, labelid != string.Empty ? labelid : label);
                 }
             }
