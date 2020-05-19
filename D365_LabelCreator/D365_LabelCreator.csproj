@@ -42,40 +42,44 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\envdte80.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.AX.Metadata">
-      <HintPath>..\..\..\..\..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.AX.Metadata, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.AX.Metadata.Core">
-      <HintPath>..\..\..\..\..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Metadata.Core.dll</HintPath>
-    <Reference Include="Microsoft.Dynamics.AX.Xpp.AxShared">
-      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\p0d4ok4y.hmt\AddinExtensions\Microsoft.Dynamics.AX.Xpp.AxShared.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.AX.Metadata.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Metadata.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.AutomationObjects">
-      <HintPath>..\..\..\..\..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.AutomationObjects.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.AX.Xpp.AxShared, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Xpp.AxShared.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.Configuration">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.AutomationObjects, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.AutomationObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.Configuration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.Core">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.Core.dll</HintPath>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.Extensibility">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.Extensibility.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.Integration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.Integration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.Integration">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.Integration.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.LabelEditor, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\s5z1klfo.2t1\Microsoft.Dynamics.Framework.Tools.LabelEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.LabelEditor">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.LabelEditor.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.MetaModel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSystem">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\3vzvfvbk.mbe\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
