@@ -54,17 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Xpp.AxShared.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.AutomationObjects, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.AutomationObjects.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.Core">
-      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamics.Framework.Tools.Integration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.Integration.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.LabelEditor, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\s5z1klfo.2t1\Microsoft.Dynamics.Framework.Tools.LabelEditor.dll</HintPath>
