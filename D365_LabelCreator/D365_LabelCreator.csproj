@@ -47,6 +47,8 @@
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata.Core">
       <HintPath>..\..\..\..\..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.AX.Metadata.Core.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.AX.Xpp.AxShared">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\p0d4ok4y.hmt\AddinExtensions\Microsoft.Dynamics.AX.Xpp.AxShared.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.AutomationObjects">
       <HintPath>..\..\..\..\..\..\..\AOSService\PackagesLocalDirectory\bin\Microsoft.Dynamics.Framework.Tools.AutomationObjects.dll</HintPath>

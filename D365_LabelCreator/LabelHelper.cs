@@ -8,6 +8,7 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Microsoft.Dynamics.AX.Server.Core.Service;
 
 namespace D365_LabelCreator
 {
@@ -21,12 +22,37 @@ namespace D365_LabelCreator
         // Label file to write into
         AxLabelFile currentLabelFile;
         // Get the metamodel provider
-        IMetaModelProviders metaModelProvider = ServiceLocator.GetService(typeof(IMetaModelProviders)) as IMetaModelProviders;
+        IMetaModelProviders metaModelProvider = getMetaModelService();
+       
+
+
         bool promptOnDuplicate = true;
 
         //Factory and controller for adding and saving labels
         LabelControllerFactory factory = new LabelControllerFactory();
         LabelEditorController labelController;
+
+        public static IMetaModelProviders getMetaModelService()
+        {
+            IMetaModelProviders modelProviders;
+            try
+            {
+                modelProviders = ServiceLocator.GetService<IMetaModelProviders>();
+            }
+            catch
+            {
+                modelProviders = new ExtensibilityService();
+                ServiceLocator.RegisterService<IMetaModelProviders>(modelProviders);
+            }
+
+            if (modelProviders == null)
+            {
+                modelProviders = new ExtensibilityService();
+                ServiceLocator.RegisterService<IMetaModelProviders>(modelProviders);
+            }
+
+            return modelProviders;
+        }
 
         public LabelHelper()
         {
